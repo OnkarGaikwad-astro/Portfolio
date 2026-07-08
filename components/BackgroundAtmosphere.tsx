@@ -4,16 +4,10 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 
 export default function BackgroundAtmosphere() {
-  const { scrollYProgress } = useScroll();
-  
-  const y1 = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
-  const y2 = useTransform(scrollYProgress, [0, 1], ["0%", "-20%"]);
-
   return (
-    <div ref={ref} className="fixed inset-0 z-[-1] overflow-hidden bg-avior-bg pointer-events-none">
-      {/* Background Image with subtle Parallax */}
-      <motion.img 
-        style={{ y: y1, scale: 1.1 }}
+    <div className="fixed inset-0 z-[-1] overflow-hidden bg-avior-bg pointer-events-none">
+      {/* Background Image */}
+      <img 
         src="/nature.jpg" 
         alt="Atmospheric Background"
         className="absolute inset-0 w-full h-full object-cover opacity-90 z-0"
