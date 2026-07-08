@@ -5,7 +5,7 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, Stars, Environment, Float } from "@react-three/drei";
 import * as THREE from "three";
 
-function PlanetScene({ pGroupRef }: { pGroupRef: React.RefObject<THREE.Group> }) {
+function PlanetScene({ pGroupRef }: { pGroupRef: React.RefObject<THREE.Group | null> }) {
   const pMesh = useRef<THREE.Mesh>(null);
   const asteroidsGroup = useRef<THREE.Group>(null);
 
@@ -133,7 +133,7 @@ function PlanetScene({ pGroupRef }: { pGroupRef: React.RefObject<THREE.Group> })
   );
 }
 
-function ScrollAndMouseController({ pGroup }: { pGroup: React.RefObject<THREE.Group> }) {
+function ScrollAndMouseController({ pGroup }: { pGroup: React.RefObject<THREE.Group | null> }) {
   const mouse = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
