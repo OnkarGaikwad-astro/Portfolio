@@ -85,7 +85,6 @@ export default function Home() {
 
   return (
     <main ref={containerRef} className="relative min-h-screen w-full selection:bg-avior-primary selection:text-white">
-      <BackgroundAtmosphere />
       
       {/* Floating Glass Navbar */}
       <motion.nav 
@@ -174,15 +173,15 @@ export default function Home() {
             >
               <div className="absolute inset-0 bg-gradient-to-b from-transparent to-avior-primary/30 z-10"></div>
               <img 
-                src="/batman-the-hero-who-never-gives-up-dc-3840x2160.jpg" 
+                src="/tom.jpg" 
                 alt="Digital Portrait" 
-                className="absolute inset-0 w-full h-full object-cover filter grayscale contrast-125 mix-blend-luminosity opacity-80"
+                className="absolute inset-0 w-full h-full object-cover opacity-80"
               />
             </motion.div>
           </div>
           
           <div className="lg:w-3/5 flex flex-col justify-center space-y-8">
-            <h2 className="font-heading text-5xl md:text-6xl text-avior-primary mb-4">The Journey.</h2>
+            <h2 className="font-heading text-5xl md:text-6xl text-white mb-4">The Journey.</h2>
             
             {[
               { title: "Origins", text: "It started with a curiosity for how things work, leading to a deep dive into computer science and artificial intelligence." },
@@ -194,7 +193,7 @@ export default function Home() {
                 initial={{ opacity: 0, x: 50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.2, type: "spring" }}
                 className="skeu-card p-8 rounded-2xl group cursor-none"
               >
-                <h3 className="font-heading text-2xl text-avior-slate mb-3 group-hover:text-avior-primary transition-colors">{card.title}</h3>
+                <h3 className="font-heading text-2xl text-avior-slate mb-3 group-hover:text-white transition-colors">{card.title}</h3>
                 <p className="font-body text-avior-slate/80 leading-relaxed text-lg">{card.text}</p>
               </motion.div>
             ))}
@@ -205,26 +204,26 @@ export default function Home() {
       {/* Skills Section */}
       <section id="skills" className="py-32 px-6 lg:px-24">
         <div className="max-w-7xl mx-auto text-center mb-20">
-          <h2 className="font-heading text-5xl md:text-7xl text-avior-primary mb-6">Capabilities</h2>
+          <h2 className="font-heading text-5xl md:text-7xl text-white mb-6">Capabilities</h2>
           <p className="font-body text-xl text-avior-slate/70 max-w-2xl mx-auto">A culmination of specialized knowledge across the modern software engineering stack.</p>
         </div>
         
         <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
           <SkillSphere title="AI / ML" delay={0}>
             <p>PyTorch, TensorFlow, LLMs</p>
-            <p className="font-medium text-avior-primary">Used in 12+ projects</p>
+            <p className="font-medium text-white">Used in 12+ projects</p>
           </SkillSphere>
           <SkillSphere title="Frontend" delay={0.1}>
             <p>React, Next.js, Framer Motion</p>
-            <p className="font-medium text-avior-primary">Expert Level</p>
+            <p className="font-medium text-white">Expert Level</p>
           </SkillSphere>
           <SkillSphere title="Backend" delay={0.2}>
             <p>Node.js, Python, Go</p>
-            <p className="font-medium text-avior-primary">Highly Scalable</p>
+            <p className="font-medium text-white">Highly Scalable</p>
           </SkillSphere>
           <SkillSphere title="Cloud" delay={0.3}>
             <p>AWS, GCP, Vercel</p>
-            <p className="font-medium text-avior-primary">Certified</p>
+            <p className="font-medium text-white">Certified</p>
           </SkillSphere>
           <SkillSphere title="Databases" delay={0.4}>
             <p>PostgreSQL, Redis, MongoDB</p>
@@ -238,37 +237,39 @@ export default function Home() {
       {/* Projects Section */}
       <section id="projects" className="py-32 px-6 lg:px-24">
         <div className="max-w-7xl mx-auto mb-20">
-          <h2 className="font-heading text-5xl md:text-7xl text-avior-primary">Crafted Works</h2>
+          <h2 className="font-heading text-5xl md:text-7xl text-white">Crafted Works</h2>
         </div>
 
         <div className="space-y-32">
-          {[1, 2].map((project) => (
+          {[
+            { id: 1, title: "Neural Insight Engine", img: "/miles-morales-sitting-alone-7k.jpg", tags: ["PyTorch", "Next.js", "Redis"] },
+            { id: 2, title: "Cosmic Analytics", img: "/interstellar.jpg", tags: ["React", "WebGL", "Python"] },
+            { id: 3, title: "Gotham Security Protocol", img: "/batman-face-of-chaos-qv.jpg", tags: ["Cybersecurity", "Go", "PostgreSQL"] }
+          ].map((project, idx) => (
             <motion.div 
-              key={project}
+              key={project.id}
               initial={{ opacity: 0, y: 100 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.8 }}
-              className="w-full min-h-[80vh] skeu-card rounded-[3rem] p-8 md:p-16 flex flex-col lg:flex-row items-center gap-16 relative overflow-hidden"
+              className={`w-full min-h-[80vh] skeu-card rounded-[3rem] p-8 md:p-16 flex flex-col ${idx % 2 === 1 ? 'lg:flex-row-reverse' : 'lg:flex-row'} items-center gap-16 relative overflow-hidden`}
             >
               {/* Project Image Placeholder */}
-              <div className="lg:w-1/2 w-full h-[40vh] lg:h-[60vh] bg-white rounded-3xl shadow-inner relative flex items-center justify-center overflow-hidden group">
+              <div className="lg:w-1/2 w-full h-[40vh] lg:h-[60vh] bg-white/5 rounded-3xl shadow-inner relative flex items-center justify-center overflow-hidden group">
                   <img 
-                    src={project === 1 
-                      ? "/interstellar.jpg" 
-                      : "/nature.jpg"} 
+                    src={project.img} 
                     alt="Project Showcase" 
-                    className="absolute inset-0 w-full h-full object-cover opacity-90 mix-blend-overlay transition-transform duration-700 group-hover:scale-110"
+                    className="absolute inset-0 w-full h-full object-cover opacity-90 transition-transform duration-700 group-hover:scale-110"
                   />
               </div>
 
               {/* Project Details */}
               <div className="lg:w-1/2 flex flex-col items-start z-10">
-                <span className="font-mono text-sm tracking-widest text-avior-primary mb-4 block uppercase">Machine Learning</span>
-                <h3 className="font-heading text-5xl text-avior-text mb-6">Neural Insight Engine</h3>
+                <span className="font-mono text-sm tracking-widest text-white mb-4 block uppercase">Project {project.id}</span>
+                <h3 className="font-heading text-5xl text-avior-text mb-6">{project.title}</h3>
                 <p className="font-body text-xl text-avior-slate/80 mb-8 leading-relaxed">
-                  A high-performance AI analytics platform that processes massive datasets in real-time, providing actionable business intelligence through a perfectly fluid, skeuomorphic dashboard.
+                  A high-performance platform that processes massive datasets in real-time, providing actionable business intelligence through a perfectly fluid, skeuomorphic dashboard.
                 </p>
                 
                 <div className="flex flex-wrap gap-3 mb-12">
-                  {["PyTorch", "Next.js", "Redis", "WebGL"].map(tech => (
+                  {project.tags.map(tech => (
                     <span key={tech} className="skeu-inset px-4 py-2 rounded-full text-sm font-body text-avior-slate">{tech}</span>
                   ))}
                 </div>
@@ -290,7 +291,7 @@ export default function Home() {
       {/* Experience Timeline */}
       <section id="experience" className="py-32 px-6 overflow-hidden">
         <div className="max-w-7xl mx-auto text-center mb-20">
-          <h2 className="font-heading text-5xl md:text-7xl text-avior-primary">Milestones</h2>
+          <h2 className="font-heading text-5xl md:text-7xl text-white">Milestones</h2>
         </div>
         
         <div className="max-w-4xl mx-auto flex flex-col gap-12 pb-16 pt-8 px-4">
@@ -305,12 +306,12 @@ export default function Home() {
               className="w-full skeu-card p-8 md:p-12 rounded-3xl cursor-none group"
             >
               <div className="flex items-center gap-4 mb-6">
-                <div className="w-12 h-12 rounded-full skeu-inset flex items-center justify-center text-avior-primary font-heading">
+                <div className="w-12 h-12 rounded-full skeu-inset flex items-center justify-center text-white font-heading">
                   {item.year.slice(2)}
                 </div>
-                <h4 className="font-mono text-sm tracking-widest text-avior-primary">{item.year}</h4>
+                <h4 className="font-mono text-sm tracking-widest text-white">{item.year}</h4>
               </div>
-              <h3 className="font-heading text-2xl text-avior-text mb-2 group-hover:text-avior-primary transition-colors">{item.title}</h3>
+              <h3 className="font-heading text-2xl text-avior-text mb-2 group-hover:text-white transition-colors">{item.title}</h3>
               <p className="font-body font-medium text-avior-slate mb-4">{item.comp}</p>
               <p className="font-body text-avior-slate/70 leading-relaxed">{item.desc}</p>
             </motion.div>
@@ -327,7 +328,7 @@ export default function Home() {
           {/* Subtle floating leaves/particles placeholder via CSS */}
           <div className="absolute inset-0 pointer-events-none opacity-30 bg-[radial-gradient(circle_at_center,var(--color-avior-primary)_0%,transparent_50%)]"></div>
 
-          <h2 className="font-heading text-5xl md:text-7xl text-avior-primary mb-6 relative z-10">Start a Conversation.</h2>
+          <h2 className="font-heading text-5xl md:text-7xl text-white mb-6 relative z-10">Start a Conversation.</h2>
           <p className="font-body text-xl text-avior-slate/80 mb-16 relative z-10 max-w-2xl mx-auto">
             My inbox is always open. Whether you have a question, a project idea, or just want to connect.
           </p>

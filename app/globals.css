@@ -2,15 +2,15 @@
 @import "tailwindcss";
 
 @theme {
-  --color-avior-primary: #6D9C9F;
-  --color-avior-bg: #F1F5E2;
+  --color-avior-primary: #E60000;
+  --color-avior-bg: rgba(255, 255, 255, 0.05);
   --color-avior-white: #FFFFFF;
-  --color-avior-gray: #E7ECE6;
-  --color-avior-slate: #4E6769;
-  --color-avior-text: #34484B;
-  --color-avior-border: rgba(109,156,159,0.15);
-  --color-avior-shadow-dark: rgba(92,125,128,0.18);
-  --color-avior-shadow-light: rgba(255,255,255,0.9);
+  --color-avior-gray: #E2E8F0;
+  --color-avior-slate: #CBD5E1;
+  --color-avior-text: #F8FAFC;
+  --color-avior-border: rgba(255, 255, 255, 0.15);
+  --color-avior-shadow-dark: rgba(0, 0, 0, 0.3);
+  --color-avior-shadow-light: rgba(255, 255, 255, 0.05);
 
   --font-heading: "Playfair Display", serif;
   --font-body: "Inter", sans-serif;
@@ -24,7 +24,6 @@
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    cursor: none; /* For custom cursor */
   }
 
   ::selection {
@@ -39,92 +38,69 @@
 
 @layer utilities {
   .skeu-card {
-    background: var(--color-avior-white);
-    border: 1px solid var(--color-avior-border);
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(32px);
+    -webkit-backdrop-filter: blur(32px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: 
-      6px 6px 12px var(--color-avior-shadow-dark),
-      -6px -6px 12px var(--color-avior-shadow-light);
+      0 8px 32px -4px rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
     border-radius: 1.5rem;
   }
 
   .skeu-button {
-    background: var(--color-avior-bg);
-    border: 1px solid var(--color-avior-border);
-    box-shadow: 
-      4px 4px 8px var(--color-avior-shadow-dark),
-      -4px -4px 8px var(--color-avior-shadow-light);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    color: var(--color-avior-white);
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  }
-
-  .skeu-button:active, .skeu-button-primary:active {
-    box-shadow: 
-      inset 4px 4px 8px var(--color-avior-shadow-dark),
-      inset -4px -4px 8px var(--color-avior-shadow-light);
-    transform: translateY(2px);
   }
 
   .skeu-button:hover, .skeu-button-primary:hover {
-    box-shadow: 
-      6px 6px 12px var(--color-avior-shadow-dark),
-      -6px -6px 12px var(--color-avior-shadow-light);
-    transform: translateY(-1px);
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
+  }
+
+  .skeu-button:active, .skeu-button-primary:active {
+    transform: translateY(1px);
+    background: rgba(255, 255, 255, 0.05);
   }
 
   .skeu-button-primary {
-    background: var(--color-avior-primary);
-    color: var(--color-avior-bg);
-    border: 1px solid var(--color-avior-border);
-    box-shadow: 
-      4px 4px 8px var(--color-avior-shadow-dark),
-      -4px -4px 8px var(--color-avior-shadow-light);
+    background: rgba(230, 0, 0, 0.85); /* Solid Pure Red */
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    color: #FFFFFF;
+    border: 1px solid rgba(230, 0, 0, 0.9);
+    box-shadow: 0 8px 32px rgba(230, 0, 0, 0.4);
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
 
+  .skeu-button-primary:hover {
+    background: rgba(230, 0, 0, 0.95);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(230, 0, 0, 0.5);
+  }
+
+  .skeu-button-primary:active {
+    transform: translateY(1px);
+    background: rgba(230, 0, 0, 0.7);
+  }
+
   .skeu-inset {
-    background: var(--color-avior-bg);
-    box-shadow: 
-      inset 4px 4px 8px var(--color-avior-shadow-dark),
-      inset -4px -4px 8px var(--color-avior-shadow-light);
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 4px 12px rgba(0, 0, 0, 0.6);
   }
 
   .glass-pill {
-    background: rgba(241, 245, 226, 0.6);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+    color: #FFFFFF;
   }
-}
-
-/* Custom Cursor Base */
-.cursor-dot {
-  width: 8px;
-  height: 8px;
-  background-color: var(--color-avior-primary);
-  border-radius: 50%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-  z-index: 9999;
-  transform: translate(-50%, -50%);
-}
-
-.cursor-outline {
-  width: 40px;
-  height: 40px;
-  border: 1px solid var(--color-avior-primary);
-  border-radius: 50%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-  z-index: 9998;
-  transform: translate(-50%, -50%);
-  transition: width 0.2s, height 0.2s, background-color 0.2s;
-}
-
-/* No-cursor overrides for interactive elements handled by custom cursor JS */
-a, button, input, textarea, select {
-  cursor: none;
 }

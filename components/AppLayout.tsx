@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import CustomCursor from "@/components/CustomCursor";
 import LoadingScreen from "@/components/LoadingScreen";
 import BackgroundAtmosphere from "@/components/BackgroundAtmosphere";
 import SmoothScrolling from "@/components/SmoothScrolling";
@@ -11,11 +10,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <CustomCursor />
       <BackgroundAtmosphere />
       {loading && <LoadingScreen onComplete={() => setLoading(false)} />}
       
-      <div style={{ opacity: loading ? 0 : 1, transition: "opacity 1s ease-in-out" }}>
+      <div className="relative z-10" style={{ opacity: loading ? 0 : 1, transition: "opacity 1s ease-in-out" }}>
         <SmoothScrolling>
           {children}
         </SmoothScrolling>
