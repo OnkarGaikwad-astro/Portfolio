@@ -4,11 +4,10 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 
 export default function BackgroundAtmosphere() {
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
+  const { scrollYProgress } = useScroll();
   
-  const y1 = useTransform(scrollYProgress, [0, 1], [0, 200]);
-  const y2 = useTransform(scrollYProgress, [0, 1], [0, -150]);
+  const y1 = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
+  const y2 = useTransform(scrollYProgress, [0, 1], ["0%", "-20%"]);
 
   return (
     <div ref={ref} className="fixed inset-0 z-[-1] overflow-hidden bg-avior-bg pointer-events-none">
