@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Globe, MessageSquare, Mail, FileText, ChevronRight, Star, GitBranch, MapPin } from "lucide-react";
 import AbstractArtwork from "@/components/AbstractArtwork";
+import BackgroundAtmosphere from "@/components/BackgroundAtmosphere";
 
 // --- Subcomponents for complex animations ---
 
@@ -84,6 +85,7 @@ export default function Home() {
 
   return (
     <main ref={containerRef} className="relative min-h-screen w-full selection:bg-avior-primary selection:text-white">
+      <BackgroundAtmosphere />
       
       {/* Floating Glass Navbar */}
       <motion.nav 
