@@ -112,7 +112,7 @@ function PlanetScene({ pGroupRef }: { pGroupRef: React.RefObject<THREE.Group> })
         {/* High-density Dust Particle Ring */}
         <points>
           <bufferGeometry>
-            <bufferAttribute attach="attributes-position" count={3000} array={ringParticles} itemSize={3} />
+            <bufferAttribute attach="attributes-position" args={[ringParticles, 3]} />
           </bufferGeometry>
           <pointsMaterial color={0x88bbff} size={0.03} transparent opacity={0.8} sizeAttenuation={true} blending={THREE.AdditiveBlending} />
         </points>
