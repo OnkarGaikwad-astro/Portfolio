@@ -14,7 +14,7 @@ export default function BackgroundAtmosphere() {
       />
 
       {/* Dark Blur Overlay for perfect text contrast */}
-      <div className="absolute inset-0 backdrop-blur-[12px] bg-black/40 z-10" />
+      <div className="absolute inset-0 backdrop-blur-[4px] bg-black/40 z-10" />
 
       {/* Subtle Noise Texture for realism */}
       <div className="absolute inset-0 z-20 opacity-[0.03] bg-[url('data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMjAwIDIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZmlsdGVyIGlkPSJub2lzZUZpbHRlciI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjAuNjUiIG51bU9jdGF2ZXM9IjMiIHN0aXRjaFRpbGVzPSJzdGl0Y2giLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWx0ZXI9InVybCgjbm9pc2VGaWx0ZXIpIi8+PC9zdmc+')] mix-blend-overlay"></div>

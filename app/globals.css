@@ -24,6 +24,14 @@
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* Hide scrollbar for IE, Edge and Firefox */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  ::-webkit-scrollbar {
+    display: none;
   }
 
   ::selection {
@@ -38,21 +46,41 @@
 
 @layer utilities {
   .skeu-card {
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(32px);
-    -webkit-backdrop-filter: blur(32px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+    border-radius: 24px;
+    
+    /* Slight white base color to make the card visible without shadows */
+    background: rgba(255, 255, 255, 0.04);
+    
+    /* Massive optical distortion */
+    backdrop-filter: blur(120px) saturate(200%);
+    -webkit-backdrop-filter: blur(120px) saturate(200%);
+    
+    /* Deep black shadows to ground the card. NO WHITE SHADOWS/GLOWS. */
     box-shadow: 
-      0 8px 32px -4px rgba(0, 0, 0, 0.3),
-      inset 0 1px 0 rgba(255, 255, 255, 0.2);
-    border-radius: 1.5rem;
+      inset -1px -1px 2px rgba(0, 0, 0, 0.5),
+      0 30px 60px -10px rgba(0, 0, 0, 0.9);
+      
+    /* Very subtle white border so the edge doesn't get lost in black */
+    border: 1px solid rgba(255, 255, 255, 0.05); 
+    
+    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .skeu-card:hover {
+    transform: scale(1.05) translateY(-10px); 
+    background: rgba(255, 255, 255, 0.06); /* Very subtle brightness increase */
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle edge highlight */
+    box-shadow: 
+      inset -1px -1px 2px rgba(0, 0, 0, 0.8),
+      0 50px 100px -10px rgba(0, 0, 0, 1.0);
   }
 
   .skeu-button {
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
     color: var(--color-avior-white);
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -69,7 +97,7 @@
   }
 
   .skeu-button-primary {
-    background: rgba(230, 0, 0, 0.85); /* Solid Pure Red */
+    background: rgba(230, 0, 0, 0.85);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
     color: #FFFFFF;
@@ -91,16 +119,26 @@
 
   .skeu-inset {
     background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.05);
     box-shadow: inset 0 4px 12px rgba(0, 0, 0, 0.6);
   }
 
   .glass-pill {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+    position: relative;
+    border-radius: 24px;
+    
+    background: rgba(255, 255, 255, 0.02);
+    
+    backdrop-filter: blur(120px) saturate(200%);
+    -webkit-backdrop-filter: blur(120px) saturate(200%);
+    
+    box-shadow: 
+      inset -1px -1px 2px rgba(0, 0, 0, 0.5),
+      0 20px 40px -5px rgba(0, 0, 0, 0.8);
+      
+    border: 1px solid rgba(255, 255, 255, 0.04);
     color: #FFFFFF;
   }
 }
+
+/* Force Next.js HMR Cache Clear - Apple VisionOS Premium Glass */

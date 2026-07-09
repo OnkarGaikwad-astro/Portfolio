@@ -4,11 +4,15 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
 export default function CustomCursor() {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [mousePosition, setMousePosition] = useState({ x: -100, y: -100 });
   const [isHovering, setIsHovering] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    if (window.matchMedia("(pointer: coarse)").matches) return;
+
     const updateMousePosition = (e: MouseEvent) => {
+      if (!isVisible) setIsVisible(true);
       setMousePosition({ x: e.clientX, y: e.clientY });
     };
 
@@ -18,8 +22,7 @@ export default function CustomCursor() {
         target.tagName.toLowerCase() === "a" ||
         target.tagName.toLowerCase() === "button" ||
         target.closest("a") ||
-        target.closest("button") ||
-        target.classList.contains("interactive")
+        target.closest("button")
       ) {
         setIsHovering(true);
       } else {
@@ -27,36 +30,38 @@ export default function CustomCursor() {
       }
     };
 
+    const handleMouseLeave = () => setIsVisible(false);
+
     window.addEventListener("mousemove", updateMousePosition);
     window.addEventListener("mouseover", handleMouseOver);
+    document.addEventListener("mouseleave", handleMouseLeave);
 
     return () => {
       window.removeEventListener("mousemove", updateMousePosition);
       window.removeEventListener("mouseover", handleMouseOver);
+      document.removeEventListener("mouseleave", handleMouseLeave);
     };
-  }, []);
+  }, [isVisible]);
+
+  if (!isVisible) return null;
 
   return (
-    <>
-      <motion.div
-        className="cursor-dot hidden md:block"
-        animate={{
-          x: mousePosition.x,
-          y: mousePosition.y,
-          scale: isHovering ? 0 : 1,
+    <motion.div
+      className="hidden md:flex pointer-events-none fixed top-0 left-0 z-[10000] items-center justify-center"
+      animate={{
+        x: mousePosition.x - 20,
+        y: mousePosition.y - 20,
+        scale: isHovering ? 1.5 : 1,
+      }}
+      transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.4 }}
+    >
+      <div 
+        className="w-10 h-10 rounded-full border border-avior-white/30 backdrop-blur-sm transition-colors duration-300"
+        style={{ 
+          backgroundColor: isHovering ? 'rgba(230, 0, 0, 0.1)' : 'transparent',
+          borderColor: isHovering ? 'rgba(230, 0, 0, 0.5)' : 'rgba(255, 255, 255, 0.3)'
         }}
-        transition={{ type: "tween", ease: "backOut", duration: 0.1 }}
       />
-      <motion.div
-        className="cursor-outline hidden md:block"
-        animate={{
-          x: mousePosition.x,
-          y: mousePosition.y,
-          scale: isHovering ? 1.5 : 1,
-          backgroundColor: isHovering ? "rgba(109,156,159,0.2)" : "transparent",
-        }}
-        transition={{ type: "tween", ease: "backOut", duration: 0.2 }}
-      />
-    </>
+    </motion.div>
   );
 }

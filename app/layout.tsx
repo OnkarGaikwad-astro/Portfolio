@@ -28,7 +28,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${josefinSans.variable} ${playfairDisplay.variable} h-full antialiased`}
+      className={`${josefinSans.variable} ${playfairDisplay.variable} antialiased`}
     >
       <body>
         <AppLayout>{children}</AppLayout>
