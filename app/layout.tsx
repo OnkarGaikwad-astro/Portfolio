@@ -20,6 +20,8 @@ export const metadata: Metadata = {
   description: "Software Engineer & AI Developer",
 };
 
+import { Toaster } from "sonner";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -32,6 +34,7 @@ export default function RootLayout({
     >
       <body>
         <AppLayout>{children}</AppLayout>
+        <Toaster theme="dark" position="bottom-right" />
       </body>
     </html>
   );

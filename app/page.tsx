@@ -2,8 +2,10 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight, Globe, MessageSquare, Mail, FileText, ChevronRight, Star, GitBranch, MapPin } from "lucide-react";
-import AbstractArtwork from "@/components/AbstractArtwork";
+import { ArrowRight, Globe, MessageSquare, Mail, FileText, ChevronRight, Star, GitBranch, MapPin, Send, User } from "lucide-react";
+import { toast } from "sonner";
+import { sendEmail } from "@/lib/email";
+
 import BackgroundAtmosphere from "@/components/BackgroundAtmosphere";
 
 // --- Subcomponents for complex animations ---
@@ -79,13 +81,88 @@ export default function Home() {
   const navScale = useTransform(scrollYProgress, [0, 0.05], [1, 0.9]);
   const navY = useTransform(scrollYProgress, [0, 0.05], [0, 10]);
 
+  // Form State
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const handleContactSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    const formData = new FormData(e.currentTarget);
+    const name = formData.get('name') as string;
+    const email = formData.get('email') as string;
+    const message = formData.get('message') as string;
+    
+    try {
+      const response = await sendEmail({
+        subject: `New Portfolio Message from ${name}`,
+        message: message,
+        senderName: name,
+        replyTo: email,
+      });
+
+      if (response.success) {
+        toast.success("Message sent successfully!");
+        e.currentTarget.reset();
+      } else {
+        toast.error(response.message || "Failed to send message.");
+      }
+    } catch (error) {
+      toast.error("An unexpected error occurred. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Responsive tracking for mathematically perfect alignment
+  const [targetStartX, setTargetStartX] = useState(300);
+  const [targetX, setTargetX] = useState(-300);
+  const [targetY, setTargetY] = useState(600);
+
+  useEffect(() => {
+    const calculatePositions = () => {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+
+      // Calculate exact X target for About section (Left Column):
+      const containerWidth = Math.min(w, 1280);
+      const leftSpace = (w - containerWidth) / 2;
+      const leftColumnCenter = leftSpace + (containerWidth * 0.4) / 2;
+      const exactX = leftColumnCenter - (w / 2); // Distance from screen center
+
+      // Calculate exact X target for Hero section (Right side):
+      // Push it further right so it doesn't overlap the text. 
+      // Positioning it halfway between the screen center and the right edge of the container.
+      const rightColumnCenter = leftSpace + (containerWidth * 0.80); // Pulled slightly back left from 0.85
+      const exactStartX = rightColumnCenter - (w / 2);
+
+      // Calculate exact Y target:
+      // Distance = 50vh to clear Hero + 128px (py-32 padding) + ~374px (perfectly hitting the top of the Origins card)
+      const exactY = (h * 0.5) + 498;
+
+      setTargetStartX(exactStartX);
+      setTargetX(exactX);
+      setTargetY(exactY);
+    };
+
+    calculatePositions();
+    window.addEventListener('resize', calculatePositions);
+    return () => window.removeEventListener('resize', calculatePositions);
+  }, []);
+
+  // Portrait scroll tracking
+  const scrollWrapperRef = useRef(null);
+  const { scrollYProgress: heroAboutProgress } = useScroll({
+    target: scrollWrapperRef,
+    offset: ["start start", "end end"]
+  });
+  const portraitX = useTransform(heroAboutProgress, [0, 0.6], [targetStartX, targetX]); // Starts further right, ends exactly in left column
+  const portraitY = useTransform(heroAboutProgress, [0, 0.6], [0, targetY]);
+  const portraitScale = useTransform(heroAboutProgress, [0, 0.6], [1, 0.9]);
+
   return (
     <main ref={containerRef} className="relative min-h-screen w-full selection:bg-avior-primary selection:text-white overflow-x-hidden">
 
-      {/* Global 3D Background */}
-      <div className="fixed inset-0 -z-10 pointer-events-none">
-        <AbstractArtwork />
-      </div>
+      {/* Global 3D Background Removed */}
 
       {/* Floating Glass Navbar */}
       <motion.nav
@@ -102,92 +179,96 @@ export default function Home() {
         <a href="#contact" className="hidden md:block skeu-button-primary px-6 py-2 rounded-full font-body text-sm font-semibold">Contact</a>
       </motion.nav>
 
-      {/* Hero Section */}
-      <section className="relative min-h-screen w-full flex flex-col lg:flex-row items-center justify-center px-6 lg:px-24 pt-32 lg:pt-0 z-10 pointer-events-none">
+      {/* Scroll Wrapper for Portrait Animation */}
+      <div ref={scrollWrapperRef} className="relative w-full">
 
-        {/* Left: Content */}
-        <div className="lg:w-1/2 flex flex-col items-start z-10 mb-20 lg:mb-0 pointer-events-auto">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="flex items-center gap-2 mb-6">
-            <span className="w-12 h-[1px] bg-avior-primary"></span>
-            <span className="font-mono text-sm tracking-widest text-avior-primary uppercase">IIT Gandhinagar — AI & Embedded Systems</span>
-          </motion.div>
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1 }}
-            className="font-heading text-3xl md:text-5xl text-avior-heading mb-2"
-          >
-            Hello,
-          </motion.h2>
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.1 }}
-            className="font-heading text-6xl md:text-8xl lg:text-9xl text-avior-heading tracking-tighter mb-4"
-          >
-            I'm Onkar.
-          </motion.h1>
-
-          <Typewriter texts={["Software Engineer", "AI Developer", "Machine Learning Enthusiast", "Problem Solver"]} />
-
-          <motion.p
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.3 }}
-            className="font-body text-lg md:text-xl text-avior-slate/80 max-w-lg mb-12 leading-relaxed text-left"
-          >
-            Centered around creating impactful AI-powered software, blending deep technical expertise with beautiful, tactile design.
-          </motion.p>
-
+        {/* Absolute Portrait Container (Desktop Only) */}
+        <div className="absolute top-[50vh] left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none hidden lg:flex justify-center w-full z-0">
           <motion.div
-            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.4 }}
-            className="flex flex-wrap gap-4"
+            style={{ x: portraitX, y: portraitY, scale: portraitScale }}
+            whileHover={{ scale: 1.05, y: -20, transition: { delay: 0, duration: 0.6, ease: [0.16, 1, 0.3, 1] } }}
+            className="w-[30%] aspect-[3/4] skeu-card rounded-[2rem] overflow-hidden relative shadow-2xl pointer-events-auto"
           >
-            <motion.a whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.95 }} href="#projects" className="skeu-button-primary px-8 py-4 rounded-full flex items-center gap-3 font-medium group">
-              Explore <ChevronRight className="group-hover:translate-x-1 transition-transform" />
-            </motion.a>
-            <motion.a whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.95 }} href="#" className="skeu-button px-6 py-4 rounded-full flex items-center justify-center text-avior-text"><FileText size={20} /></motion.a>
-            <motion.a whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.95 }} href="#" className="skeu-button px-6 py-4 rounded-full flex items-center justify-center text-avior-text"><Globe size={20} /></motion.a>
-            <motion.a whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.95 }} href="#" className="skeu-button px-6 py-4 rounded-full flex items-center justify-center text-avior-text"><MessageSquare size={20} /></motion.a>
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-avior-bg/80 z-10 pointer-events-none"></div>
+            <img src="/tom.jpg" alt="Digital Portrait" className="absolute inset-0 w-full h-full object-cover opacity-80" />
           </motion.div>
         </div>
 
-        {/* Right: Empty Placeholder to balance layout */}
-        <div className="lg:w-1/2 relative h-[50vh] lg:h-[80vh] w-full flex items-center justify-center pointer-events-none"></div>
-      </section>
+        {/* Hero Section */}
+        <section className="relative min-h-screen w-full flex flex-col lg:flex-row items-center justify-center px-6 lg:px-24 pt-32 lg:pt-0 z-10 pointer-events-none">
+          {/* Left: Content */}
+          <div className="lg:w-1/2 flex flex-col items-start z-10 mb-20 lg:mb-0 pointer-events-auto">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="flex items-center gap-2 mb-6">
+              <span className="w-12 h-[1px] bg-avior-primary"></span>
+              <span className="font-mono text-sm tracking-widest text-avior-primary uppercase">IIT Gandhinagar — AI & Embedded Systems</span>
+            </motion.div>
+            <motion.h2 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1 }} className="font-heading text-3xl md:text-5xl text-avior-heading mb-2">
+              Hello,
+            </motion.h2>
+            <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.1 }} className="font-heading text-6xl md:text-8xl lg:text-9xl text-avior-heading tracking-tighter mb-4">
+              I'm Onkar.
+            </motion.h1>
 
-      {/* About Section */}
-      <section id="about" className="py-32 px-6 lg:px-24">
-        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-16">
-          <div className="lg:w-2/5">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }}
-              className="w-full aspect-[3/4] skeu-card rounded-3xl overflow-hidden relative"
-            >
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-avior-primary/30 z-10"></div>
-              <img
-                src="/tom.jpg"
-                alt="Digital Portrait"
-                className="absolute inset-0 w-full h-full object-cover opacity-80"
-              />
+            <Typewriter texts={["Software Engineer", "AI Developer", "Machine Learning Enthusiast", "Problem Solver"]} />
+
+            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.3 }} className="font-body text-lg md:text-xl text-avior-slate/80 max-w-lg mb-12 leading-relaxed text-left">
+              Centered around creating impactful AI-powered software, blending deep technical expertise with beautiful, tactile design.
+            </motion.p>
+
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.4 }} className="flex flex-wrap gap-4">
+              <motion.a whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.95 }} href="#about" className="skeu-button-primary px-8 py-4 rounded-full flex items-center gap-3 font-medium group">
+                Explore <ChevronRight className="group-hover:translate-x-1 transition-transform" />
+              </motion.a>
+              <motion.a title="Resume" target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.95 }} href="/resume.pdf" className="skeu-button px-6 py-4 rounded-full flex items-center justify-center text-avior-text"><FileText size={20} /></motion.a>
+              <motion.a title="GitHub" target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.95 }} href="https://github.com/OnkarGaikwad" className="skeu-button px-6 py-4 rounded-full flex items-center justify-center text-avior-text"><Globe size={20} /></motion.a>
+              <motion.a title="Email Me" whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.95 }} href="mailto:onkargaikwad3319@gmail.com" className="skeu-button px-6 py-4 rounded-full flex items-center justify-center text-avior-text"><MessageSquare size={20} /></motion.a>
             </motion.div>
           </div>
 
-          <div className="lg:w-3/5 flex flex-col justify-center space-y-8 pointer-events-auto">
-            <h2 className="font-heading text-5xl md:text-6xl text-avior-heading mb-4">The Journey.</h2>
-
-            {[
-              { title: "Origins", text: "It started with a curiosity for how things work, leading to a deep dive into computer science and artificial intelligence." },
-              { title: "Vision", text: "To craft software that feels entirely human. I believe the best interfaces are those that don't feel like interfaces at all, but natural extensions of thought." },
-              { title: "Passion", text: "Beyond the screen, I find inspiration in minimal architecture, soft lighting, and the calm of early mornings." }
-            ].map((card, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, x: 50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.2, type: "spring" }}
-                whileHover={{ scale: 1.05, y: -10, transition: { delay: 0, duration: 0.6, ease: [0.16, 1, 0.3, 1] } }}
-                className="skeu-card p-8 rounded-2xl group"
-              >
-                <h3 className="font-heading text-2xl text-avior-heading mb-3 group-hover:text-avior-white transition-colors">{card.title}</h3>
-                <p className="font-body text-avior-slate/80 leading-relaxed text-lg">{card.text}</p>
-              </motion.div>
-            ))}
+          {/* Right: Empty Placeholder for Desktop, Static Portrait for Mobile */}
+          <div className="lg:w-1/2 relative w-full flex items-center justify-center pointer-events-auto">
+            <div className="hidden lg:block w-full h-[80vh] pointer-events-none"></div>
+            {/* Mobile Portrait */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1, y: [0, -15, 0] }}
+              transition={{ opacity: { duration: 1, delay: 0.5 }, scale: { duration: 1, delay: 0.5, type: "spring" }, y: { repeat: Infinity, duration: 6, ease: "easeInOut", delay: 1 } }}
+              className="lg:hidden w-[80%] md:w-[60%] aspect-[3/4] skeu-card rounded-[2rem] overflow-hidden relative"
+            >
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-avior-bg/80 z-10 pointer-events-none"></div>
+              <img src="/tom.jpg" alt="Digital Portrait" className="absolute inset-0 w-full h-full object-cover opacity-80" />
+            </motion.div>
           </div>
-        </div>
-      </section>
+        </section>
+
+        {/* About Section */}
+        <section id="about" className="py-32 px-6 lg:px-24 relative z-10 pointer-events-none">
+          <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-16 pointer-events-auto">
+            {/* Left Placeholder for Desktop, Empty for Mobile */}
+            <div className="hidden lg:block lg:w-2/5"></div>
+
+            {/* Right Content */}
+            <div className="lg:w-3/5 flex flex-col justify-center space-y-8 pointer-events-auto">
+              <h2 className="font-heading text-5xl md:text-6xl text-avior-heading mb-4">The Journey.</h2>
+
+              {[
+                { title: "Origins", text: "It started with a curiosity for how things work, leading to a deep dive into computer science and artificial intelligence." },
+                { title: "Vision", text: "To craft software that feels entirely human. I believe the best interfaces are those that don't feel like interfaces at all, but natural extensions of thought." },
+                { title: "Passion", text: "Beyond the screen, I find inspiration in minimal architecture, soft lighting, and the calm of early mornings." }
+              ].map((card, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: 50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.2, type: "spring" }}
+                  whileHover={{ scale: 1.05, y: -10, transition: { delay: 0, duration: 0.6, ease: [0.16, 1, 0.3, 1] } }}
+                  className="skeu-card p-8 rounded-2xl group"
+                >
+                  <h3 className="font-heading text-2xl text-avior-heading mb-3 group-hover:text-avior-white transition-colors">{card.title}</h3>
+                  <p className="font-body text-avior-slate/80 leading-relaxed text-lg">{card.text}</p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+      </div>
 
       {/* Skills Section */}
       <section id="skills" className="py-32 px-6 lg:px-24 pointer-events-none">
@@ -318,25 +399,64 @@ export default function Home() {
       {/* Contact Section */}
       <section id="contact" className="py-32 px-6 lg:px-24">
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 0.8 }}
-          className="max-w-4xl mx-auto skeu-card rounded-[3rem] p-10 md:p-20 text-center relative overflow-hidden"
+          initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}
+          className="max-w-6xl mx-auto skeu-card rounded-[3rem] p-10 md:p-16 lg:p-20 relative overflow-hidden flex flex-col md:flex-row items-center gap-16 lg:gap-24"
         >
-          {/* Subtle floating leaves/particles placeholder via CSS */}
-          <div className="absolute inset-0 pointer-events-none opacity-30 bg-[radial-gradient(circle_at_center,var(--color-avior-primary)_0%,transparent_50%)]"></div>
+          {/* Subtle background gradient */}
+          <div className="absolute inset-0 pointer-events-none opacity-30 bg-[radial-gradient(circle_at_left,var(--color-avior-primary)_0%,transparent_60%)]"></div>
 
-          <h2 className="font-heading text-5xl md:text-7xl text-avior-heading mb-6 relative z-10">Start a Conversation.</h2>
-          <p className="font-body text-xl text-avior-slate/80 mb-16 relative z-10 max-w-2xl mx-auto">
-            My inbox is always open. Whether you have a question, a project idea, or just want to connect.
-          </p>
+          {/* Left side: Text */}
+          <div className="md:w-1/2 text-left relative z-10">
+            <h2 className="font-heading text-5xl md:text-6xl lg:text-7xl text-avior-heading mb-6 leading-tight">Let's build<br />something.</h2>
+            <p className="font-body text-xl text-avior-slate/80 mb-12 max-w-md">
+              My inbox is always open. Whether you have a question, a project idea, or just want to connect.
+            </p>
+            <div className="flex gap-4">
+              <motion.a whileHover={{ scale: 1.1, y: -2 }} whileTap={{ scale: 0.9 }} href="https://github.com/OnkarGaikwad" target="_blank" rel="noopener noreferrer" className="w-14 h-14 skeu-inset rounded-full flex items-center justify-center text-avior-text hover:text-avior-primary transition-colors">
+                <Globe size={24} />
+              </motion.a>
+              <motion.a whileHover={{ scale: 1.1, y: -2 }} whileTap={{ scale: 0.9 }} href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="w-14 h-14 skeu-inset rounded-full flex items-center justify-center text-avior-text hover:text-avior-primary transition-colors">
+                <FileText size={24} />
+              </motion.a>
+            </div>
+          </div>
 
-          <form className="flex flex-col gap-6 max-w-md mx-auto relative z-10">
-            <input type="text" placeholder="Your Name" className="w-full skeu-inset bg-transparent px-6 py-4 rounded-xl font-body text-avior-text placeholder:text-avior-slate/50 outline-none focus:ring-2 focus:ring-avior-primary/50 transition-shadow" />
-            <input type="email" placeholder="Your Email" className="w-full skeu-inset bg-transparent px-6 py-4 rounded-xl font-body text-avior-text placeholder:text-avior-slate/50 outline-none focus:ring-2 focus:ring-avior-primary/50 transition-shadow" />
-            <textarea placeholder="Your Message" rows={4} className="w-full skeu-inset bg-transparent px-6 py-4 rounded-xl font-body text-avior-text placeholder:text-avior-slate/50 outline-none focus:ring-2 focus:ring-avior-primary/50 transition-shadow resize-none" />
-            <button type="button" className="w-full skeu-button-primary mt-4 py-4 rounded-xl font-heading text-xl">
-              Send Message
-            </button>
-          </form>
+          {/* Right side: Form */}
+          <div className="md:w-1/2 w-full relative z-10">
+            <form onSubmit={handleContactSubmit} className="flex flex-col gap-6 w-full">
+
+              <div className="relative group">
+                <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-avior-slate/50 group-focus-within:text-avior-primary transition-colors">
+                  <User size={20} />
+                </div>
+                <input required name="name" type="text" placeholder="Your Name" className="w-full skeu-inset bg-black/10 px-6 py-5 pl-14 rounded-2xl font-body text-avior-text placeholder:text-avior-slate/40 outline-none focus:ring-2 focus:ring-avior-primary/50 transition-all border border-white/5 focus:border-avior-primary/30" />
+              </div>
+
+              <div className="relative group">
+                <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-avior-slate/50 group-focus-within:text-avior-primary transition-colors">
+                  <Mail size={20} />
+                </div>
+                <input required name="email" type="email" placeholder="Your Email" className="w-full skeu-inset bg-black/10 px-6 py-5 pl-14 rounded-2xl font-body text-avior-text placeholder:text-avior-slate/40 outline-none focus:ring-2 focus:ring-avior-primary/50 transition-all border border-white/5 focus:border-avior-primary/30" />
+              </div>
+
+              <div className="relative group">
+                <textarea required name="message" placeholder="How can I help you?" rows={5} className="w-full skeu-inset bg-black/10 px-6 py-6 rounded-2xl font-body text-avior-text placeholder:text-avior-slate/40 outline-none focus:ring-2 focus:ring-avior-primary/50 transition-all border border-white/5 focus:border-avior-primary/30 resize-none" />
+              </div>
+
+              <motion.button
+                whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
+                type="submit"
+                className="w-full skeu-button-primary mt-2 py-5 rounded-2xl font-heading text-xl flex items-center justify-center gap-3 group relative overflow-hidden"
+              >
+                <span className="relative z-10 flex items-center gap-3">
+                  {isSubmitting ? "Sending..." : "Send Message"} 
+                  {!isSubmitting && <Send size={20} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />}
+                </span>
+                <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out z-0"></div>
+              </motion.button>
+
+            </form>
+          </div>
         </motion.div>
       </section>
 
