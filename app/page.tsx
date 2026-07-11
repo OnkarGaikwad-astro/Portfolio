@@ -2,7 +2,7 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight, Globe, MessageSquare, Mail, FileText, ChevronRight, Star, GitBranch, MapPin, Send, User, Quote, Brain, Network, Eye, Zap, Smartphone, Cloud, Bot, Terminal, Palette, Code, Linkedin } from "lucide-react";
+import { ArrowRight, Globe, MessageSquare, Mail, FileText, ChevronRight, Star, GitBranch, MapPin, Send, User, Quote, Brain, Network, Eye, Zap, Smartphone, Cloud, Bot, Terminal, Palette, Code, Briefcase } from "lucide-react";
 import { toast } from "sonner";
 import { sendEmail } from "@/lib/email";
 
@@ -168,7 +168,7 @@ export default function Home() {
               </motion.a>
               <motion.a title="Resume" target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.95 }} href="/resume.pdf" className="skeu-button px-6 py-4 rounded-full flex items-center justify-center text-avior-text"><FileText size={20} /></motion.a>
               <motion.a title="GitHub" target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.95 }} href="https://github.com/OnkarGaikwad-astro" className="skeu-button px-6 py-4 rounded-full flex items-center justify-center text-avior-text"><GitBranch size={20} /></motion.a>
-              <motion.a title="LinkedIn" target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.95 }} href="https://www.linkedin.com/in/onkar-gaikwad-b64851322" className="skeu-button px-6 py-4 rounded-full flex items-center justify-center text-avior-text"><Linkedin size={20} /></motion.a>
+              <motion.a title="LinkedIn" target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.95 }} href="https://www.linkedin.com/in/onkar-gaikwad-b64851322" className="skeu-button px-6 py-4 rounded-full flex items-center justify-center text-avior-text"><Briefcase size={20} /></motion.a>
               <motion.a title="Email Me" whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.95 }} href="mailto:onkargaikwad3319@gmail.com" className="skeu-button px-6 py-4 rounded-full flex items-center justify-center text-avior-text"><MessageSquare size={20} /></motion.a>
             </motion.div>
           </div>
@@ -489,7 +489,7 @@ export default function Home() {
                 <GitBranch size={24} />
               </motion.a>
               <motion.a whileHover={{ scale: 1.1, y: -2 }} whileTap={{ scale: 0.9 }} href="https://www.linkedin.com/in/onkar-gaikwad-b64851322" target="_blank" rel="noopener noreferrer" className="w-14 h-14 skeu-inset rounded-full flex items-center justify-center text-avior-text hover:text-avior-primary transition-colors">
-                <Linkedin size={24} />
+                <Briefcase size={24} />
               </motion.a>
               <motion.a whileHover={{ scale: 1.1, y: -2 }} whileTap={{ scale: 0.9 }} href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="w-14 h-14 skeu-inset rounded-full flex items-center justify-center text-avior-text hover:text-avior-primary transition-colors">
                 <FileText size={24} />
@@ -544,7 +544,7 @@ export default function Home() {
         </p>
         <div className="flex justify-center gap-6 mb-8 text-avior-slate/50">
           <a href="https://github.com/OnkarGaikwad-astro" className="hover:text-avior-primary transition-colors"><GitBranch size={20} /></a>
-          <a href="https://www.linkedin.com/in/onkar-gaikwad-b64851322" className="hover:text-avior-primary transition-colors"><Linkedin size={20} /></a>
+          <a href="https://www.linkedin.com/in/onkar-gaikwad-b64851322" className="hover:text-avior-primary transition-colors"><Briefcase size={20} /></a>
           <a href="mailto:onkargaikwad3319@gmail.com" className="hover:text-avior-primary transition-colors"><Mail size={20} /></a>
           <a href="/resume.pdf" className="hover:text-avior-primary transition-colors"><FileText size={20} /></a>
         </div>
