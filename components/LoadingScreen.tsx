@@ -16,44 +16,56 @@ export default function LoadingScreen({ onComplete }: { onComplete: () => void }
         }
         return prev + Math.floor(Math.random() * 15) + 5;
       });
-    }, 200);
+    }, 120);
     return () => clearInterval(interval);
   }, [onComplete]);
+
+  // Circumference of the SVG circle: 2 * pi * r (46)
+  const circumference = 289.03;
 
   return (
     <motion.div
       initial={{ opacity: 1 }}
       animate={{ opacity: progress === 100 ? 0 : 1 }}
       transition={{ duration: 0.8, ease: "easeInOut" }}
-      className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-avior-bg backdrop-blur-3xl"
+      className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#050505] backdrop-blur-3xl"
     >
-      <div className="relative flex items-center justify-center w-32 h-32">
-        {/* Animated Orbit */}
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ repeat: Infinity, duration: 4, ease: "linear" }}
-          className="absolute inset-0 rounded-full border border-avior-primary/20 border-t-avior-primary"
-        />
+      {/* Subtle colored glow */}
+      <div className="absolute inset-0 pointer-events-none opacity-20 bg-[radial-gradient(circle_at_center,var(--color-avior-primary)_0%,transparent_50%)] mix-blend-screen"></div>
+      
+      <div className="relative flex items-center justify-center w-40 h-40">
         
-        {/* Tiny Star */}
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ repeat: Infinity, duration: 4, ease: "linear" }}
-          className="absolute inset-0"
-        >
-          <div className="w-2 h-2 bg-avior-primary rounded-full absolute -top-1 left-1/2 transform -translate-x-1/2 shadow-[0_0_8px_#6D9C9F]" />
-        </motion.div>
+        {/* SVG Circular Progress Bar */}
+        <svg className="absolute inset-0 w-full h-full -rotate-90 filter drop-shadow-[0_0_10px_rgba(255,255,255,0.05)]" viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="46" fill="none" className="stroke-white/5" strokeWidth="1" />
+          <motion.circle 
+            cx="50" cy="50" r="46" fill="none" 
+            className="stroke-avior-primary" 
+            strokeWidth="1.5"
+            strokeDasharray={circumference}
+            animate={{ strokeDashoffset: circumference - (progress / 100) * circumference }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            strokeLinecap="round"
+          />
+        </svg>
 
         {/* Center Logo */}
-        <h1 className="font-heading text-2xl tracking-widest text-avior-slate z-10 uppercase">
+        <h1 className="font-heading text-2xl tracking-[0.3em] text-avior-white z-10 uppercase ml-2">
           Onkar
         </h1>
       </div>
       
-      {/* Percentage */}
-      <div className="mt-12 font-mono text-sm text-avior-slate/70 tracking-widest">
-        {Math.min(progress, 100)}%
-      </div>
+      {/* Percentage & Status Line */}
+      <motion.div 
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+        className="mt-12 font-mono text-sm tracking-[0.2em] flex items-center gap-6"
+      >
+        <span className="w-12 text-right text-avior-primary font-bold">{Math.min(progress, 100)}%</span>
+        <div className="h-px w-16 bg-gradient-to-r from-avior-primary/50 to-transparent"></div>
+        <span className="text-avior-slate/40">LOADING SYSTEM</span>
+      </motion.div>
     </motion.div>
   );
 }
