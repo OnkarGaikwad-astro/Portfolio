@@ -159,7 +159,7 @@ export default function Home() {
             <Typewriter texts={["AI Undergraduate", "Software Engineer", "Full Stack Developer", "Machine Learning Enthusiast"]} />
 
             <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.3 }} className="font-body text-lg md:text-xl text-avior-slate/80 max-w-lg mb-12 leading-relaxed text-left">
-              Building practical software that combines artificial intelligence, solid engineering, and clean design.
+              I write code that lives at the intersection of AI and product design. I'm currently an undergrad at IIT Gandhinagar, focused on building full-stack applications that are smart, fast, and actually useful.
             </motion.p>
 
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.4 }} className="flex flex-wrap gap-4">
