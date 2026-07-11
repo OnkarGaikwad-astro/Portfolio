@@ -50,7 +50,9 @@ export default function LoadingScreen({ onComplete }: { onComplete: () => void }
         </svg>
 
         {/* Center Logo */}
-        <img src="/icon.png" alt="Logo" className="w-16 h-16 object-contain z-10 animate-pulse" />
+        <div className="absolute inset-0 m-auto w-[65%] h-[65%] rounded-3xl overflow-hidden z-10 flex items-center justify-center shadow-[0_0_20px_rgba(255,255,255,0.05)]">
+          <img src="/icon.png" alt="Logo" className="w-full h-full object-cover animate-pulse" />
+        </div>
       </div>
       
       {/* Percentage & Status Line */}

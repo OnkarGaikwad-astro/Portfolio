@@ -18,6 +18,9 @@ const playfairDisplay = Playfair_Display({
 export const metadata: Metadata = {
   title: "Onkar | Premium Portfolio",
   description: "Software Engineer & AI Developer",
+  icons: {
+    icon: "/icon.png",
+  },
 };
 
 import { Toaster } from "sonner";

@@ -127,7 +127,7 @@ export default function Home() {
         className="fixed top-6 left-1/2 -translate-x-1/2 z-50 glass-pill px-8 py-4 rounded-2xl flex items-center justify-between w-[95%] max-w-7xl"
       >
         <div className="flex items-center gap-3">
-          <img src="/icon.png" alt="Logo" className="w-8 h-8 object-contain" />
+          <img src="/icon.png" alt="Logo" className="w-8 h-8 object-cover rounded-lg overflow-hidden" />
           <span className="font-heading text-2xl font-bold tracking-widest text-avior-slate">ONKAR</span>
         </div>
         <div className="hidden md:flex gap-8 font-body text-sm font-medium text-avior-slate/70">
