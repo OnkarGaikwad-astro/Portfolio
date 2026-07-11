@@ -37,7 +37,7 @@ export async function POST(request: Request) {
       from: `${fromName} <${fromAddress}>`,
       to: [recipientEmail],
       subject: subject,
-      reply_to: replyTo,
+      replyTo: replyTo,
       html: `
         <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; border: 1px solid #eaeaea; overflow: hidden; box-shadow: 0 4px 14px rgba(0,0,0,0.05);">
           <div style="background-color: #0f172a; padding: 30px; text-align: center;">
