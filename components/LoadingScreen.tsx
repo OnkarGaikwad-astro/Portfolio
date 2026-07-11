@@ -50,9 +50,7 @@ export default function LoadingScreen({ onComplete }: { onComplete: () => void }
         </svg>
 
         {/* Center Logo */}
-        <h1 className="font-heading text-2xl tracking-[0.3em] text-avior-white z-10 uppercase ml-2">
-          Onkar
-        </h1>
+        <img src="/icon.png" alt="Logo" className="w-16 h-16 object-contain z-10 animate-pulse" />
       </div>
       
       {/* Percentage & Status Line */}
