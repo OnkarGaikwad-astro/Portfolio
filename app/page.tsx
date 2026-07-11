@@ -451,18 +451,29 @@ export default function Home() {
       </section>
 
 
-      {/* GitHub Activity */}
+      {/* Links & Profiles */}
       <section className="py-24 px-6 lg:px-24 pointer-events-none relative z-10 bg-black/20 border-y border-white/5">
         <div className="max-w-7xl mx-auto pointer-events-auto text-center">
-          <h2 className="font-heading text-4xl text-avior-heading mb-6">GitHub Activity</h2>
-          <p className="font-body text-lg text-avior-slate/70 max-w-2xl mx-auto mb-12">Consistent contributions, open-source experiments, and a deep history of continuous deployment.</p>
-          <div className="flex justify-center">
-            <a href="https://github.com/OnkarGaikwad-astro" target="_blank" rel="noreferrer" className="skeu-card px-10 py-10 rounded-3xl border border-white/5 flex flex-col items-center hover:bg-white/5 transition-colors group">
+          <h2 className="font-heading text-4xl text-avior-heading mb-6">Explore Further</h2>
+          <p className="font-body text-lg text-avior-slate/70 max-w-2xl mx-auto mb-12">Dive deeper into my open-source contributions or download my full professional resume.</p>
+          <div className="flex flex-col md:flex-row justify-center gap-8">
+            {/* GitHub Card */}
+            <a href="https://github.com/OnkarGaikwad-astro" target="_blank" rel="noreferrer" className="skeu-card w-full md:w-80 px-10 py-10 rounded-3xl border border-white/5 flex flex-col items-center hover:bg-white/5 transition-colors group">
               <GitBranch className="w-12 h-12 text-avior-primary mb-6 group-hover:scale-110 transition-transform" />
-              <h3 className="font-heading text-2xl text-avior-white mb-2">View GitHub Profile</h3>
+              <h3 className="font-heading text-2xl text-avior-white mb-2">GitHub Profile</h3>
               <p className="font-body text-avior-slate/70 mb-8">@OnkarGaikwad-astro</p>
               <div className="skeu-button-primary px-6 py-3 rounded-full font-body font-semibold flex items-center gap-2">
                 View on GitHub <ArrowRight size={16} />
+              </div>
+            </a>
+            
+            {/* Resume Card */}
+            <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="skeu-card w-full md:w-80 px-10 py-10 rounded-3xl border border-white/5 flex flex-col items-center hover:bg-white/5 transition-colors group">
+              <FileText className="w-12 h-12 text-avior-primary mb-6 group-hover:scale-110 transition-transform" />
+              <h3 className="font-heading text-2xl text-avior-white mb-2">My Resume</h3>
+              <p className="font-body text-avior-slate/70 mb-8">PDF Format</p>
+              <div className="skeu-button-primary px-6 py-3 rounded-full font-body font-semibold flex items-center gap-2">
+                View Resume <ArrowRight size={16} />
               </div>
             </a>
           </div>
